@@ -8,6 +8,39 @@ html {
   }
 }
 
+nav, footer {
+    background-color: #880101;
+}
+
+
+.imgs {
+    width: 400px;
+    height: 300px;
+}
+
+.nav-link:hover, .navbar-brand:hover {
+    color: #9B2727 !important;
+    transition: all 0.5s linear;
+}
+
+@media screen and (max-width: 576px) {
+    .nav-item::after {
+        display: none !important;
+    }
+}
+
+.nav-item::after {
+    content: "";
+    display: block;
+    transform: scaleX(0);
+    transition: transform 250ms ease-in-out;
+    border-bottom: 3px solid #fff;
+}
+
+.nav-item:hover::after {
+    transform: scaleX(1);
+}
+
 html {
   position: relative;
   min-height: 100%;
