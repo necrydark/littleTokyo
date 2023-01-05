@@ -12,9 +12,9 @@ namespace littleTokyo.Pages.Menus
 {
     public class DetailsModel : PageModel
     {
-        private readonly littleTokyo.Data.MenuContext _context;
+        private readonly littleTokyoContext _context;
 
-        public DetailsModel(littleTokyo.Data.MenuContext context)
+        public DetailsModel(littleTokyoContext context)
         {
             _context = context;
         }

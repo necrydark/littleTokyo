@@ -1,11 +1,9 @@
 ﻿@page
 @model littleTokyo.Pages.Menus.IndexModel
-
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
 
 <p>
     <a asp-page="Create">Create New</a>
@@ -51,6 +49,17 @@
             <td>
                 @Html.DisplayFor(modelItem => item.category)
             </td>
+            @{
+                try {
+                    <td>
+                        <img src="@string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(item.ImageData))" alt="item.ImageDescription" />
+                    </td>
+                } catch {
+                    <td>
+                        <img src="~/img/dumpling-soup.jpeg" alt="No Image Provided"/>
+                    </td>
+                }
+            }
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
                 <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |

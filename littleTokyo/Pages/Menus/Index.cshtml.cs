@@ -13,19 +13,19 @@ namespace littleTokyo.Pages.Menus
 {
     public class IndexModel : PageModel
     {
-        private readonly littleTokyo.Data.MenuContext _context;
+        private readonly littleTokyoContext _context;
 
-        public IndexModel(littleTokyo.Data.MenuContext context)
+        public IndexModel(littleTokyoContext context)
         {
             _context = context;
         }
 
         public IList<Menu> Menu { get;set; } = default!;
         [BindProperty(SupportsGet = true)]
-        public string ? SearchString { get; set; }
-        public SelectList ? Categories { get; set; }
+        public string SearchString { get; set; }
+        public SelectList Categories { get; set; }
         [BindProperty(SupportsGet = true)]
-        public string ? FoodCategory { get; set; }
+        public string FoodCategory { get; set; }
 
         public async Task OnGetAsync()
         {
@@ -33,7 +33,7 @@ namespace littleTokyo.Pages.Menus
                         select m;
             if(!string.IsNullOrEmpty(SearchString))
             {
-                items = items.Where(s => s.itemName.Contains(SearchString));
+                items = items.Where(predicate: s => s.itemName.Contains(SearchString));
             }
 
             Menu = await items.ToListAsync();

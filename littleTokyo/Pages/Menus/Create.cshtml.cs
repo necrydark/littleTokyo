@@ -12,9 +12,9 @@ namespace littleTokyo.Pages.Menus
 {
     public class CreateModel : PageModel
     {
-        private readonly littleTokyo.Data.MenuContext _context;
+        private readonly littleTokyoContext _context;
 
-        public CreateModel(littleTokyo.Data.MenuContext context)
+        public CreateModel(littleTokyoContext context)
         {
             _context = context;
         }
@@ -31,9 +31,15 @@ namespace littleTokyo.Pages.Menus
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid)
+          if (!ModelState.IsValid) { return Page(); }
+
+          foreach(var file in Request.Form.Files)
             {
-                return Page();
+                MemoryStream ms = new MemoryStream();
+                file.CopyTo(ms);
+                Menu.ImageData = ms.ToArray();
+                ms.Close();
+                ms.Dispose();
             }
 
             _context.Menus.Add(Menu);

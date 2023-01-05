@@ -4,9 +4,9 @@ namespace littleTokyo.Data
 {
     public static class DbInitializer
     {
-        public static void Initialize(MenuContext context)
+        public static void Initialize(littleTokyoContext context)
         {
-            if(context.Menus.Any())
+            if (context.Menus.Any())
             {
                 return;
             }

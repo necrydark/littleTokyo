@@ -13,9 +13,9 @@ namespace littleTokyo.Pages.Menus
 {
     public class EditModel : PageModel
     {
-        private readonly littleTokyo.Data.MenuContext _context;
+        private readonly littleTokyoContext _context;
 
-        public EditModel(littleTokyo.Data.MenuContext context)
+        public EditModel(littleTokyoContext context)
         {
             _context = context;
         }
@@ -71,7 +71,7 @@ namespace littleTokyo.Pages.Menus
 
         private bool MenuExists(int id)
         {
-          return _context.Menus.Any(e => e.ID == id);
+            return _context.Menus.Any(e => e.ID == id);
         }
     }
 }
