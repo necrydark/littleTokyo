@@ -17,6 +17,7 @@ builder.Services.AddDbContext<littleTokyoContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MenuContext") ?? throw new InvalidOperationException("Connection string 'MenuContext' not found.")));
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<littleTokyoContext>();
   
 builder.Services.AddControllersWithViews();
@@ -54,14 +55,13 @@ app.UseRouting();
 app.UseAuthentication();;
 
 app.UseAuthorization();
-
 app.MapRazorPages();
 
 app.Run();
 
-void AddAuthorizationPolicies(IServiceCollection services)
+void AddAuthorizationPolicies()
 {
-    services.AddAuthorization(options =>
+    builder.Services.AddAuthorization(options =>
     {
         options.AddPolicy("AdminOnly", policy => policy.RequireClaim("Admin"));
     });
@@ -71,3 +71,4 @@ void AddAuthorizationPolicies(IServiceCollection services)
         options.AddPolicy(Constants.Policies.RequireAdmin, policy => policy.RequireRole(Constants.Roles.Administrator));
     });
 }
+
