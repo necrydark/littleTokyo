@@ -6,16 +6,17 @@ namespace littleTokyo.Controllers
 {
     public class RoleController : Controller
     {
-        [Authorize(Policy ="AdminOnly")]
 
-        [Authorize(Policy = Constants.Policies.RequireAdmin)]
+
+        [Authorize(Policy = "RequireAdmin")]
+        [Authorize(Roles = "Administrator")]
         public IActionResult Manager()
         {
             return View();
         }
 
-        //[Authorize(Policy = "RequireAdmin")]
-        [Authorize(Roles = $"{Constants.Roles.Administrator}")]
+        [Authorize(Policy = "RequireAdmin")]
+        //[Authorize(Roles = $"{Constants.Roles.Administrator}")]
         public IActionResult Admin()
         {
             return View();

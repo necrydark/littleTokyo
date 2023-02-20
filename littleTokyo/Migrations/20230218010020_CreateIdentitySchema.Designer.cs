@@ -12,8 +12,8 @@ using littleTokyo.Data;
 namespace littleTokyo.Migrations
 {
     [DbContext(typeof(littleTokyoContext))]
-    [Migration("20230105130322_InitApplicationUser")]
-    partial class InitApplicationUser
+    [Migration("20230218010020_CreateIdentitySchema")]
+    partial class CreateIdentitySchema
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

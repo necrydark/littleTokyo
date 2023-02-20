@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace littleTokyo.Areas.Identity.Pages.Account
 {
@@ -31,12 +32,18 @@ namespace littleTokyo.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
+
+        private littleTokyoContext _db;
+        public CheckoutCustomer Customer = new CheckoutCustomer();
+        public Basket Basket = new Basket();
+
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            littleTokyoContext db)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -44,6 +51,7 @@ namespace littleTokyo.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _db = db;
         }
 
         /// <summary>
@@ -71,14 +79,13 @@ namespace littleTokyo.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
+
             [Required]
-            [StringLength(255, ErrorMessage = "The first name field should have a maximum of 255 characters")]
-            [Display(Name = "Firstname")]
+            [Display(Name = "First Name")]
             public string FirstName { get; set; }
 
             [Required]
-            [StringLength(255, ErrorMessage = "The last name field should have a maximum of 255 characters")]
-            [Display(Name = "Lastname")]
+            [Display(Name = "Last Name")]
             public string LastName { get; set; }
 
             /// <summary>
@@ -155,6 +162,8 @@ namespace littleTokyo.Areas.Identity.Pages.Account
                     else
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
+                        NewBasket();
+                        NewCustomer(Input.Email);
                         return LocalRedirect(returnUrl);
                     }
                 }
@@ -166,6 +175,31 @@ namespace littleTokyo.Areas.Identity.Pages.Account
 
             // If we got this far, something failed, redisplay form
             return Page();
+        }
+
+        public void NewBasket()
+        {
+            var currentBasket = _db.baskets.FromSqlRaw("SELECT * FROM Baskets")
+                .OrderByDescending(b => b.BasketID)
+                .FirstOrDefault();
+            if (currentBasket == null)
+            {
+                Basket.BasketID = 1;
+            }
+            else
+            {
+                Basket.BasketID = currentBasket.BasketID + 1;
+            }
+            _db.baskets.Add(Basket);
+            _db.SaveChanges();   
+        }
+
+        public void NewCustomer(string Email)
+        {
+            Customer.Email = Email;
+            Customer.BasketID = Basket.BasketID;
+            _db.checkoutCustomers.Add(Customer);
+            _db.SaveChanges();
         }
 
         private ApplicationUser CreateUser()

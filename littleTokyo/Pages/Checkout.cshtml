@@ -1,0 +1,45 @@
+﻿@page
+@model littleTokyo.Pages.CheckoutModel
+@{
+    ViewData["Title"] = "LT - Checkout";
+}
+@using littleTokyo.Data
+@using Microsoft.Extensions.Options
+
+<h1>Little Tokyo Checkout</h1>
+@if (Model.Items.Count == 0)
+{
+    <p> You do not have any items in your basket!</p>
+}
+else
+{
+    <form method="post">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    var subtotal = item.itemPrice * item.Quantity;
+                    <tr>
+                        <td>@item.itemName</td>
+                        <td>@item.itemPrice.ToString("C")</td>
+                        <td>@item.Quantity</td>
+                        <td>@subtotal.ToString("C")</td>
+                    </tr>
+                }
+                <tr>
+                    <td colspan="3" class="text-right">Total</td>
+                    <td>@Model.Total.ToString("C")</td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="submit" asp-page-handler="Buy">Buy</button>
+    </form>
+}

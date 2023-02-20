@@ -16,11 +16,42 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<littleTokyoContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MenuContext") ?? throw new InvalidOperationException("Connection string 'MenuContext' not found.")));
 
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+//builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+//    .AddRoles<IdentityRole>()
+//    .AddDefaultUI()
+//    .AddDefaultTokenProviders()
+//    .AddEntityFrameworkStores<littleTokyoContext>();
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
+    options =>
+    {
+        options.SignIn.RequireConfirmedAccount = false;
+        options.Password.RequireDigit = false;
+        options.Password.RequiredLength = 0;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+    }
+    )
+    .AddEntityFrameworkStores<littleTokyoContext>()
     .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<littleTokyoContext>();
-  
+    .AddDefaultUI()
+    .AddDefaultTokenProviders();
+
 builder.Services.AddControllersWithViews();
+
+
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+});
+
+builder.Services.AddRazorPages()
+    .AddRazorPagesOptions(options =>
+    {
+        options.Conventions.AuthorizeFolder("/Admin", "AdminOnly");
+    });
 
 var app = builder.Build();
 
@@ -30,21 +61,12 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
-} else
+}
+else
 {
     app.UseDeveloperExceptionPage();
-    
+
 }
-
-using (var scope =  app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-
-    var context = services.GetRequiredService<littleTokyoContext>();
-    context.Database.EnsureCreated();
-    DbInitializer.Initialize(context);
-}
-
 
 
 
@@ -52,23 +74,27 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseAuthentication();;
+app.UseAuthentication(); ;
 
 app.UseAuthorization();
 app.MapRazorPages();
 
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<littleTokyoContext>();
+
+    var userMgr = services.GetRequiredService<UserManager<ApplicationUser>>();
+    var roleMgr = services.GetRequiredService<RoleManager<IdentityRole>>();
+    context.Database.EnsureCreated();
+    //DbInitializer.Initialize(context);
+    IdentitySeedData.Initialize(context, userMgr, roleMgr).Wait();
+}
+
+
+
 app.Run();
 
-void AddAuthorizationPolicies()
-{
-    builder.Services.AddAuthorization(options =>
-    {
-        options.AddPolicy("AdminOnly", policy => policy.RequireClaim("Admin"));
-    });
 
-    builder.Services.AddAuthorization(options =>
-    {
-        options.AddPolicy(Constants.Policies.RequireAdmin, policy => policy.RequireRole(Constants.Roles.Administrator));
-    });
-}
 
