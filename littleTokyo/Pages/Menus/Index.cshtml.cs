@@ -32,6 +32,10 @@ namespace littleTokyo.Pages.Menus
         public SelectList Categories { get; set; }
         [BindProperty(SupportsGet = true)]
         public string FoodCategory { get; set; }
+        //[BindProperty]
+        //public string Search { get; set; }
+
+
 
 
         public async Task OnGetAsync()
@@ -40,7 +44,7 @@ namespace littleTokyo.Pages.Menus
                         select m;
             if (!string.IsNullOrEmpty(SearchString))
             {
-                items = items.Where(predicate: s => s.itemName.Contains(SearchString));
+                items = items.Where(predicate: s => s.itemName!.Contains(SearchString));
             }
 
             Menu = await items.ToListAsync();
@@ -51,6 +55,28 @@ namespace littleTokyo.Pages.Menus
         {
             var user = await _userManager.GetUserAsync(User);
             CheckoutCustomer customer = await _context.checkoutCustomers.FindAsync(user.Email);
+
+            if (customer == null)
+            {
+                Basket Basket = new Basket();
+                customer.Email = user.Email;
+                customer.BasketID = Basket.BasketID;
+                _context.checkoutCustomers.Add(customer);
+                _context.SaveChanges();
+                var currentBasket = _context.baskets.FromSqlRaw("SELECT * FROM Baskets")
+              .OrderByDescending(b => b.BasketID)
+              .FirstOrDefault();
+                if (currentBasket == null)
+                {
+                    Basket.BasketID = 1;
+                }
+                else
+                {
+                    Basket.BasketID = currentBasket.BasketID + 1;
+                }
+                _context.baskets.Add(Basket);
+                _context.SaveChanges();
+            }
 
             var item = _context.BasketItems
                 .FromSqlRaw("SELECT * FROM BasketItems WHERE StockID = {0} AND BasketID = {1}", id, customer.BasketID)

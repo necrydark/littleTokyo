@@ -29,10 +29,34 @@ namespace littleTokyo.Pages
             var user = await _userManager.GetUserAsync(User);
             CheckoutCustomer customer = await _context.checkoutCustomers.FindAsync(user.Email);
 
+            
+            if(customer == null)
+            {
+                Basket Basket = new Basket();
+                var currentBasket = _context.baskets.FromSqlRaw("SELECT * FROM Baskets")
+              .OrderByDescending(b => b.BasketID)
+              .FirstOrDefault();
+                if (currentBasket == null)
+                {
+                    Basket.BasketID = 1;
+                }
+                else
+                {
+                    Basket.BasketID = currentBasket.BasketID + 1;
+                }
+                CheckoutCustomer Customer = new CheckoutCustomer();
+                Customer.Email = user.Email;
+                Customer.BasketID = Basket.BasketID;
+                _context.baskets.Add(Basket);
+                _context.checkoutCustomers.Add(Customer);
+                _context.SaveChanges();
+            }
+
+            CheckoutCustomer newCustomer = await _context.checkoutCustomers.FindAsync(user.Email);
 
             Items = _context.CheckoutItems.FromSqlRaw("SELECT Menu.ID, Menu.itemPrice, Menu.itemName, BasketItems.BasketID, BasketItems.Quantity " +
                 "FROM Menu INNER JOIN BasketItems ON Menu.ID = BasketItems.BasketID " +
-                "WHERE BasketID = {0}", customer.BasketID).ToList();
+                "WHERE BasketID = {0}", newCustomer.BasketID).ToList();
 
             Total = 0;
 

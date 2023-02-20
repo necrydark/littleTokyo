@@ -7,12 +7,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using littleTokyo.Data;
 using littleTokyo.Models;
+using System.IO;
 
 namespace littleTokyo.Pages.Menus
 {
     public class CreateModel : PageModel
     {
         private readonly littleTokyoContext _context;
+        [BindProperty]
+        public Menu Menu { get; set; }
 
         public CreateModel(littleTokyoContext context)
         {
@@ -24,8 +27,7 @@ namespace littleTokyo.Pages.Menus
             return Page();
         }
 
-        [BindProperty]
-        public Menu Menu { get; set; }
+      
         
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
@@ -33,7 +35,7 @@ namespace littleTokyo.Pages.Menus
         {
           if (!ModelState.IsValid) { return Page(); }
 
-          foreach(var file in Request.Form.Files)
+          foreach (var file in Request.Form.Files)
             {
                 MemoryStream ms = new MemoryStream();
                 file.CopyTo(ms);
@@ -45,7 +47,7 @@ namespace littleTokyo.Pages.Menus
             _context.Menus.Add(Menu);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("../Menus/Index");
         }
     }
 }

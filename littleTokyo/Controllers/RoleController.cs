@@ -9,7 +9,7 @@ namespace littleTokyo.Controllers
 
 
         [Authorize(Policy = "RequireAdmin")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Manager()
         {
             return View();

@@ -9,10 +9,14 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Little Tokyo</title>
+    <title>LT - @ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/littleTokyo.styles.css" asp-append-version="true" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
 </head>
 <body>
     <header>
@@ -28,9 +32,6 @@
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-area="" asp-page="/Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-page="/Contact">Contact</a>
-                        </li>
                         @if (SignInManager.IsSignedIn(User))
                         {
                             <li class="nav-item">
@@ -40,9 +41,12 @@
                                 <a class="nav-link text-white" asp-area="" asp-page="/Checkout">Checkout</a>
                             </li>
                         }
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-page="/Contact">Contact</a>
+                        </li>
                     </ul>
+                    <partial name="_LoginPartial" />
                 </div>
-                <partial name="_LoginPartial" />
             </div>
         </nav>
     </header>
@@ -53,9 +57,15 @@
     </div>
 
 
-    <footer class="border-top footer text-white">
+    @*  <footer class="border-top footer text-white">
+    <div class="container">
+    &copy; 2022 - Little Tokyo - <a asp-area="" asp-page="/Privacy">Privacy</a>
+    </div>
+    </footer>*@
+
+    <footer class="d-flex flex-wrap justify-content-between align-items-center  py-3 mt-4 border-top">
         <div class="container">
-            &copy; 2022 - Little Tokyo - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            <p class="col-md-6 mb-0 text-white">&copy; 2022 - Little Tokyo - <a asp-area="" class="text-white" asp-page="/Privacy">Privacy</a></p>
         </div>
     </footer>
 

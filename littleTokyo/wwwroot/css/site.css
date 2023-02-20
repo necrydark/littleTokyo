@@ -1,5 +1,12 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
+    padding-bottom: 75px;
+}
+
+body {
+    margin-bottom: 75px;
 }
 
 @media (min-width: 768px) {
@@ -12,6 +19,12 @@ nav, footer {
     background-color: #880101;
 }
 
+footer{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 75px;
+}
 
 .imgs {
     width: 400px;
@@ -19,7 +32,7 @@ nav, footer {
 }
 
 .nav-link:hover, .navbar-brand:hover {
-    color: #9B2727 !important;
+    color: #fff !important;
     transition: all 0.5s linear;
 }
 
@@ -41,11 +54,3 @@ nav, footer {
     transform: scaleX(1);
 }
 
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  margin-bottom: 60px;
-}

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using littleTokyo.Data;
 using littleTokyo.Models;
+using System.IO;
 
 namespace littleTokyo.Pages.Menus
 {
@@ -48,6 +49,16 @@ namespace littleTokyo.Pages.Menus
                 return Page();
             }
 
+            foreach (var file in Request.Form.Files)
+            {
+                MemoryStream ms = new MemoryStream();
+                file.CopyTo(ms);
+                Menu.ImageData = ms.ToArray();
+                ms.Close();
+                ms.Dispose();
+            }
+
+
             _context.Attach(Menu).State = EntityState.Modified;
 
             try
@@ -66,7 +77,7 @@ namespace littleTokyo.Pages.Menus
                 }
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("../Menus/Index");
         }
 
         private bool MenuExists(int id)
