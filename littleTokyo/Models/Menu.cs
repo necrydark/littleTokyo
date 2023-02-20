@@ -6,14 +6,17 @@ namespace littleTokyo.Models
 {
     public class Menu
     {
+        [Key]
         public int ID { get; set; }
 
         [Required]
         [Display(Name = "Item Name")]
+        [StringLength(50, MinimumLength = 3)]
         public string itemName { get; set; }
 
         [Required]
         [Display(Name = "Item Description")]
+        [StringLength(250, MinimumLength = 10)]
         public string itemDesc { get; set; }
 
         [Required]
@@ -24,8 +27,13 @@ namespace littleTokyo.Models
 
         [Required]
         [Display(Name = "Category")]
-        public string category { get; set; } 
-        
+        public string category { get; set; }
+
+        [Display(Name = "Image Description")]
+        public string ImageDescription { get; set; }
+
+        [Display(Name = "Image")]
+        public byte[] ImageData { get; set; } 
     
     }
 }

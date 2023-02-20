@@ -1,62 +1,90 @@
 ﻿@page
 @model littleTokyo.Pages.Menus.IndexModel
-
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-page="Create">Create New</a>
+    }
 </p>
 
-<form>
+<form method="post">
     <p>
         Item Name: <input type="text" asp-for="SearchString" />
         <input type="submit" value="Filter" />
     </p>
-</form>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Menu[0].itemName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Menu[0].itemDesc)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Menu[0].itemPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Menu[0].category)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Menu) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.itemName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.itemDesc)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.itemPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.category)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Menu[0].itemName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Menu[0].itemDesc)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Menu[0].itemPrice)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Menu[0].category)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Menu)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.itemName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.itemDesc)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.itemPrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.category)
+                    </td>
+                    @{
+                        try
+                        {
+                            <td>
+                                <img src="@string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(item.ImageData))" alt="item.ImageDescription" class="img-thumbnail" />
+                            </td>
+                        }
+                        catch
+                        {
+                            <td>
+                                <img src="~/img/dumpling-soup.jpeg" alt="No Image Provided" class="img-thumbnail" />
+                            </td>
+                        }
+                    }
+                    <td>
+                        <button type="submit" asp-page-handler="Buy" asp-route-id="@item.ID">
+                            Add To Basket
+                        </button>
+                    </td>
+                    <td>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a>
+                            <a asp-page="./Details" asp-route-id="@item.ID">Details</a>
+                            <a asp-page="./Delete" asp-route-id="@item.ID">Delete </a>
+                        }
+                        @*           <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>*@
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>

@@ -11,7 +11,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Menu.itemName" class="control-label"></label>
@@ -32,6 +32,17 @@
                 <label asp-for="Menu.category" class="control-label"></label>
                 <input asp-for="Menu.category" class="form-control" />
                 <span asp-validation-for="Menu.category" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Menu.ImageDescription" class="control-label"></label>
+                <input asp-for="Menu.ImageDescription" class="form-control" />
+                <span asp-validation-for="Menu.ImageDescription" class="text-danger"></span>
+                <div> 
+                    Upload Image: <br />
+                    <input type="file" id="file1"
+                        name="file1"
+                        multiple="multiple" />
+                </div>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

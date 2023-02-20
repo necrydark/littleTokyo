@@ -12,9 +12,9 @@ namespace littleTokyo.Pages.Menus
 {
     public class DeleteModel : PageModel
     {
-        private readonly littleTokyo.Data.MenuContext _context;
+        private readonly littleTokyoContext _context;
 
-        public DeleteModel(littleTokyo.Data.MenuContext context)
+        public DeleteModel(littleTokyoContext context)
         {
             _context = context;
         }
