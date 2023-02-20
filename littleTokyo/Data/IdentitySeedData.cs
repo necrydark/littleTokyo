@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using littleTokyo.Areas.Identity.Pages.Account;
+using Microsoft.AspNetCore.Identity;
 
 namespace littleTokyo.Data
 {
@@ -35,6 +36,8 @@ namespace littleTokyo.Data
                     PhoneNumber = "01244 123456"
                 };
 
+                
+
                 var result = await userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
@@ -62,5 +65,8 @@ namespace littleTokyo.Data
                 }
             }
         }
+
+       
+
     }
 }

@@ -1,15 +1,15 @@
 ﻿@page
 @model littleTokyo.Pages.CheckoutModel
 @{
-    ViewData["Title"] = "LT - Checkout";
+    ViewData["Title"] = "Checkout";
 }
 @using littleTokyo.Data
 @using Microsoft.Extensions.Options
 
-<h1>Little Tokyo Checkout</h1>
+<h1 class="text-center">Little Tokyo Checkout</h1>
 @if (Model.Items.Count == 0)
 {
-    <p> You do not have any items in your basket!</p>
+    <p class="text-center"> You do not have any items in your basket!</p>
 }
 else
 {
@@ -40,6 +40,6 @@ else
                 </tr>
             </tbody>
         </table>
-        <button type="submit" asp-page-handler="Buy">Buy</button>
+        <button type="submit" asp-page-handler="Buy" class="btn btn-danger float-end">Buy</button>
     </form>
 }

@@ -53,6 +53,9 @@ builder.Services.AddRazorPages()
         options.Conventions.AuthorizeFolder("/Admin", "AdminOnly");
     });
 
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -67,7 +70,6 @@ else
     app.UseDeveloperExceptionPage();
 
 }
-
 
 
 app.UseHttpsRedirection();
@@ -88,7 +90,7 @@ using (var scope = app.Services.CreateScope())
     var userMgr = services.GetRequiredService<UserManager<ApplicationUser>>();
     var roleMgr = services.GetRequiredService<RoleManager<IdentityRole>>();
     context.Database.EnsureCreated();
-    //DbInitializer.Initialize(context);
+    DbInitializer.Initialize(context);
     IdentitySeedData.Initialize(context, userMgr, roleMgr).Wait();
 }
 

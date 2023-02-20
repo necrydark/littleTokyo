@@ -1,13 +1,12 @@
 ﻿@page
-@model littleTokyo.Pages.Menus.DeleteModel
+@model littleTokyo.Pages.Menus.DetailsModel
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Details";
 }
 
-<h1>Delete</h1>
+<h1>Details</h1>
 
-<h3>Are you sure you want to delete this?</h3>
 <div>
     <h4>Menu</h4>
     <hr />
@@ -37,10 +36,8 @@
             @Html.DisplayFor(model => model.Menu.category)
         </dd>
     </dl>
-    
-    <form method="post">
-        <input type="hidden" asp-for="Menu.ID" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-page="./Index">Back to List</a>
-    </form>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Menu?.ID" class="btn btn-danger">Edit</a> 
+    <a asp-page="../Menus/Index" class="btn btn-danger">Back to List</a>
 </div>
